@@ -16,5 +16,6 @@
     <?php require ROOT_PATH . '/views/partials/footer.php'; ?>
     <?php require ROOT_PATH . '/views/partials/chat-button.php'; ?>
     <script src="<?= e(asset('js/main.js')) ?>" defer></script>
+    <?php if ((string) config('recaptcha.site_key', '') !== ''): ?><script src="https://www.google.com/recaptcha/api.js" async defer></script><?php endif; ?>
 </body>
 </html>

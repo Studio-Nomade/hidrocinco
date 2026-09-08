@@ -95,6 +95,24 @@ function csrf_field(): string
     return \App\Csrf::field();
 }
 
+function flash_set(string $key, mixed $value): void
+{
+    $_SESSION['_flash'][$key] = $value;
+}
+
+function flash_get(string $key, mixed $default = null): mixed
+{
+    $value = $_SESSION['_flash'][$key] ?? $default;
+    unset($_SESSION['_flash'][$key]);
+    return $value;
+}
+
+function safe_return_path(?string $path, string $fallback = '/'): string
+{
+    $path = parse_url((string) $path, PHP_URL_PATH) ?: $fallback;
+    return str_starts_with($path, '/') && !str_starts_with($path, '//') ? $path : $fallback;
+}
+
 /** @param array<string, mixed> $data */
 function view(string $name, array $data = []): void
 {

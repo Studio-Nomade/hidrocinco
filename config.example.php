@@ -17,11 +17,17 @@ return [
         'dsn' => getenv('DB_DSN') ?: null,
     ],
     'mail' => [
+        'host' => getenv('MAIL_HOST') ?: '',
+        'port' => (int) (getenv('MAIL_PORT') ?: 587),
+        'user' => getenv('MAIL_USER') ?: '',
+        'pass' => getenv('MAIL_PASS') ?: '',
+        'encryption' => getenv('MAIL_ENCRYPTION') ?: 'tls',
         'to' => getenv('MAIL_TO') ?: 'hidrocinco@hidrocinco.cl',
         'from' => getenv('MAIL_FROM') ?: 'web@hidrocinco.cl',
+        'from_name' => getenv('MAIL_FROM_NAME') ?: 'Web Hidrocinco',
     ],
     'recaptcha' => [
         'site_key' => getenv('RECAPTCHA_SITE_KEY') ?: '',
-        'secret_key' => getenv('RECAPTCHA_SECRET_KEY') ?: '',
+        'secret_key' => getenv('RECAPTCHA_SECRET_KEY') ?: (getenv('RECAPTCHA_SECRET') ?: ''),
     ],
 ];

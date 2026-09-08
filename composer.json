@@ -1,0 +1,14 @@
+{
+  "name": "hidrocinco/sitio-oficial",
+  "description": "Sitio oficial de Hidrocinco",
+  "license": "proprietary",
+  "type": "project",
+  "require": {
+    "php": ">=8.1",
+    "phpmailer/phpmailer": "^7.1.1"
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}

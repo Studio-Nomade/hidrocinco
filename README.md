@@ -6,6 +6,7 @@ Sitio público y backoffice liviano en PHP 8 + MySQL, preparado para SiteGround 
 
 ```bash
 cp config.example.php config.php
+composer install
 php -S localhost:8000 -t public
 ```
 
@@ -28,3 +29,13 @@ destino de producción sigue siendo MySQL.
 
 El seed crea `admin@hidrocinco.cl` con la contraseña inicial documentada en el roadmap. Debe
 cambiarse inmediatamente en cada entorno real.
+
+## Formularios y correo
+
+Los formularios requieren claves reCAPTCHA v2 y una cuenta SMTP. Crea las claves en la consola de
+Google reCAPTCHA, registra `hidrocinco.cl` y `localhost`, y configura `RECAPTCHA_SITE_KEY`,
+`RECAPTCHA_SECRET_KEY`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASS`, `MAIL_FROM` y `MAIL_TO`.
+El correo usa PHPMailer por SMTP; los envíos se guardan en la base aunque SMTP no esté disponible.
+
+Para pruebas automatizadas exclusivamente en `APP_ENV=development`, define
+`RECAPTCHA_TEST_MODE=1` y envía el token `test-pass`. Este bypass no opera en producción.

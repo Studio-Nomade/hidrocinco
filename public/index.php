@@ -9,6 +9,9 @@ use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\ServiceAdminController;
 use App\Controllers\Admin\PostAdminController;
+use App\Controllers\Admin\SubmissionAdminController;
+use App\Controllers\ContactController;
+use App\Controllers\NewsletterController;
 use App\Router;
 
 require dirname(__DIR__) . '/src/bootstrap.php';
@@ -18,6 +21,9 @@ $router->get('/', [HomeController::class, 'index']);
 $router->get('/servicios/{slug}', [ServiceController::class, 'show']);
 $router->get('/blog', [BlogController::class, 'index']);
 $router->get('/blog/{slug}', [BlogController::class, 'show']);
+$router->get('/contacto', [ContactController::class, 'show']);
+$router->post('/contacto', [ContactController::class, 'submit']);
+$router->post('/newsletter', [NewsletterController::class, 'submit']);
 $router->get('/admin/login', [AuthController::class, 'showLogin']);
 $router->post('/admin/login', [AuthController::class, 'login']);
 $router->post('/admin/logout', [AuthController::class, 'logout']);
@@ -35,6 +41,7 @@ $router->post('/admin/blog', [PostAdminController::class, 'store']);
 $router->get('/admin/blog/{id}/editar', [PostAdminController::class, 'edit']);
 $router->post('/admin/blog/{id}/eliminar', [PostAdminController::class, 'destroy']);
 $router->post('/admin/blog/{id}', [PostAdminController::class, 'update']);
+$router->get('/admin/mensajes', [SubmissionAdminController::class, 'index']);
 $router->get('/{legacySlug}', [ServiceController::class, 'redirectLegacy']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

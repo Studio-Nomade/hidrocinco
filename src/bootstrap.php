@@ -11,6 +11,12 @@ if (!is_file($configFile)) {
 
 $GLOBALS['config'] = require $configFile;
 
+$composerAutoload = ROOT_PATH . '/vendor/autoload.php';
+if (!is_file($composerAutoload)) {
+    throw new RuntimeException('Faltan dependencias de Composer. Ejecuta composer install antes de iniciar el sitio.');
+}
+require $composerAutoload;
+
 spl_autoload_register(static function (string $class): void {
     $prefix = 'App\\';
     if (!str_starts_with($class, $prefix)) {

@@ -28,13 +28,18 @@ $encodedTitle = rawurlencode((string) $post['title']);
 </div></div></section>
 <?php endif; ?>
 
-<section class="newsletter-section section">
+<?php $newsletterFeedback = flash_get('newsletter_feedback', []); $newsletterOld = $newsletterFeedback['old'] ?? []; $newsletterErrors = $newsletterFeedback['errors'] ?? []; ?>
+<section class="newsletter-section section" id="newsletter">
     <div class="container newsletter-shell">
         <div><p class="eyebrow">Mantente al día</p><h2>Suscríbete a nuestro newsletter</h2></div>
-        <!-- TODO Hito 8: persistir suscripción y enviar confirmación. -->
         <form action="<?= e(url('/newsletter')) ?>" method="post">
-            <label><span class="sr-only">Nombre</span><input type="text" name="name" placeholder="Nombre" required></label>
-            <label><span class="sr-only">Email</span><input type="email" name="email" placeholder="Email" required></label>
+            <?= csrf_field() ?><input type="hidden" name="source_page" value="<?= e(parse_url($_SERVER['REQUEST_URI'] ?? '/blog', PHP_URL_PATH) ?: '/blog') ?>">
+            <div class="honeypot" aria-hidden="true"><label>No completar<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+            <?php if (!empty($newsletterFeedback['success'])): ?><p class="form-success" role="status"><?= e($newsletterFeedback['success']) ?></p><?php endif; ?>
+            <label><span class="sr-only">Nombre</span><input type="text" name="name" value="<?= e($newsletterOld['name'] ?? '') ?>" placeholder="Nombre"></label>
+            <label><span class="sr-only">Email</span><input type="email" name="email" value="<?= e($newsletterOld['email'] ?? '') ?>" placeholder="Email" required></label>
+            <?php if ((string) config('recaptcha.site_key', '') !== ''): ?><div class="g-recaptcha" data-sitekey="<?= e(config('recaptcha.site_key')) ?>"></div><?php else: ?><p class="form-config-note">Configura reCAPTCHA para habilitar envíos reales.</p><?php endif; ?>
+            <?php if ($newsletterErrors): ?><small class="field-error" role="alert"><?= e(implode(' ', $newsletterErrors)) ?></small><?php endif; ?>
             <button class="btn" type="submit">Suscribir</button>
         </form>
     </div>

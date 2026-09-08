@@ -17,7 +17,7 @@
             <a href="<?= e(url('/admin')) ?>">Dashboard</a>
             <a href="<?= e(url('/admin/servicios')) ?>">Servicios</a>
             <a href="<?= e(url('/admin/blog')) ?>">Blog</a>
-            <span aria-disabled="true">Mensajes <small>Próximamente</small></span>
+            <a href="<?= e(url('/admin/mensajes')) ?>">Mensajes</a>
         </nav>
         <form action="<?= e(url('/admin/logout')) ?>" method="post"><?= csrf_field() ?><button type="submit">Cerrar sesión</button></form>
     </aside>
