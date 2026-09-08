@@ -39,6 +39,19 @@ function truncate_text(string $text, int $length = 180): string
     return rtrim(mb_substr($plain, 0, $length - 1)) . '…';
 }
 
+function fecha_es(?string $date): string
+{
+    if (!$date) {
+        return '';
+    }
+    $months = [1 => 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    $timestamp = strtotime($date);
+    if ($timestamp === false) {
+        return '';
+    }
+    return (int) date('j', $timestamp) . ' de ' . $months[(int) date('n', $timestamp)] . ', ' . date('Y', $timestamp);
+}
+
 function not_found(): void
 {
     http_response_code(404);
