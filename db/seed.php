@@ -114,7 +114,11 @@ $admin = $db->prepare('SELECT id FROM admin_users WHERE email = :email');
 $admin->execute(['email' => 'admin@hidrocinco.cl']);
 $adminId = $admin->fetchColumn();
 if (!$adminId) {
-    $adminData = ['email' => 'admin@hidrocinco.cl', 'password_hash' => password_hash('Hidrocinco2026!', PASSWORD_DEFAULT), 'name' => 'Administrador'];
+    $seedPassword = (string) getenv('ADMIN_SEED_PASSWORD');
+    if (strlen($seedPassword) < 14) {
+        throw new RuntimeException('Define ADMIN_SEED_PASSWORD con al menos 14 caracteres para crear el administrador inicial.');
+    }
+    $adminData = ['email' => 'admin@hidrocinco.cl', 'password_hash' => password_hash($seedPassword, PASSWORD_DEFAULT), 'name' => 'Administrador'];
     $db->prepare('INSERT INTO admin_users (email,password_hash,name) VALUES (:email,:password_hash,:name)')->execute($adminData);
 }
 

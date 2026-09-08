@@ -1,0 +1,15 @@
+/.git/
+/.github/
+/Local/
+/docs/
+/.deployignore
+/config.php
+/.env*
+/*.key
+/*.pem
+/id_rsa*
+/id_ed25519*
+/public/uploads/***
+/var/***
+/.phpunit.cache/
+/.DS_Store

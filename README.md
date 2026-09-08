@@ -20,15 +20,18 @@ entorno. Después ejecuta:
 
 ```bash
 php db/migrate.php
+read -rsp 'Contraseña inicial del admin: ' ADMIN_SEED_PASSWORD && echo
+export ADMIN_SEED_PASSWORD
 php db/seed.php
+unset ADMIN_SEED_PASSWORD
 php db/check.php
 ```
 
 Para verificación local sin MySQL se admite explícitamente `DB_DSN=sqlite:/ruta/db.sqlite`; el
 destino de producción sigue siendo MySQL.
 
-El seed crea `admin@hidrocinco.cl` con la contraseña inicial documentada en el roadmap. Debe
-cambiarse inmediatamente en cada entorno real.
+El seed crea `admin@hidrocinco.cl` usando `ADMIN_SEED_PASSWORD` (mínimo 14 caracteres). La clave no
+queda en el repositorio y debe cambiarse inmediatamente en cada entorno real.
 
 ## Formularios y correo
 
@@ -39,3 +42,13 @@ El correo usa PHPMailer por SMTP; los envíos se guardan en la base aunque SMTP 
 
 Para pruebas automatizadas exclusivamente en `APP_ENV=development`, define
 `RECAPTCHA_TEST_MODE=1` y envía el token `test-pass`. Este bypass no opera en producción.
+
+## Deploy
+
+Los pushes a `main` despliegan a producción mediante GitHub Actions, SSH y rsync. El workflow
+construye `vendor/`, conserva `config.php` y `public/uploads/`, y luego ejecuta las migraciones
+idempotentes. Staging y las simulaciones se ejecutan manualmente desde Actions.
+
+La provisión inicial, los secrets requeridos, la promoción staging → producción y el rollback están
+documentados en [docs/DEPLOY.md](docs/DEPLOY.md). No ejecutes `db/seed.php` automáticamente ni
+guardes credenciales en el repositorio.

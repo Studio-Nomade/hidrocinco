@@ -1,5 +1,12 @@
 .DS_Store
 config.php
+.env
+.env.*
+!.env.example
+id_rsa*
+id_ed25519*
+*.key
+*.pem
 public/uploads/*
 !public/uploads/.gitkeep
 !public/uploads/.htaccess
