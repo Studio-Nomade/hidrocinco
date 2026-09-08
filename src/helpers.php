@@ -30,6 +30,21 @@ function asset(string $path): string
     return url('/assets/' . ltrim($path, '/'));
 }
 
+function truncate_text(string $text, int $length = 180): string
+{
+    $plain = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
+    if (mb_strlen($plain) <= $length) {
+        return $plain;
+    }
+    return rtrim(mb_substr($plain, 0, $length - 1)) . '…';
+}
+
+function not_found(): void
+{
+    http_response_code(404);
+    view('404', ['title' => 'Página no encontrada — Hidrocinco']);
+}
+
 /** @param array<string, mixed> $data */
 function view(string $name, array $data = []): void
 {

@@ -35,8 +35,7 @@ final class Router
             return;
         }
 
-        http_response_code(404);
-        view('404', ['title' => 'Página no encontrada — Hidrocinco']);
+        not_found();
     }
 
     private function add(string $method, string $pattern, callable|array $handler): void
