@@ -13,6 +13,7 @@ use App\Controllers\Admin\SubmissionAdminController;
 use App\Controllers\ContactController;
 use App\Controllers\NewsletterController;
 use App\Controllers\SitemapController;
+use App\Controllers\AppsCincoController;
 use App\Router;
 
 require dirname(__DIR__) . '/src/bootstrap.php';
@@ -22,6 +23,7 @@ $router->get('/', [HomeController::class, 'index']);
 $router->get('/servicios/{slug}', [ServiceController::class, 'show']);
 $router->get('/blog', [BlogController::class, 'index']);
 $router->get('/blog/{slug}', [BlogController::class, 'show']);
+$router->get('/appscinco', [AppsCincoController::class, 'index']);
 $router->get('/contacto', [ContactController::class, 'show']);
 $router->post('/contacto', [ContactController::class, 'submit']);
 $router->post('/newsletter', [NewsletterController::class, 'submit']);

@@ -12,6 +12,7 @@
             <a href="<?= e(url('/#nosotros')) ?>">Nosotros</a>
             <a href="<?= e(url('/#vision')) ?>">Visión</a>
             <a href="<?= e(url('/blog')) ?>">Blog</a>
+            <a href="<?= e(url('/appscinco')) ?>">AppsCinco</a>
             <a class="btn btn--outline" href="<?= e(url('/contacto')) ?>">Contacto</a>
         </nav>
     </div>
