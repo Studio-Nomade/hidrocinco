@@ -58,6 +58,31 @@ function not_found(): void
     view('404', ['title' => 'Página no encontrada — Hidrocinco']);
 }
 
+function redirect(string $path, int $status = 302): never
+{
+    header('Location: ' . (str_starts_with($path, 'http') ? $path : url($path)), true, $status);
+    exit;
+}
+
+/** @param array<string, mixed> $data */
+function admin_view(string $name, array $data = []): void
+{
+    extract($data, EXTR_SKIP);
+    $viewFile = ROOT_PATH . '/views/admin/' . $name . '.php';
+    if (!is_file($viewFile)) {
+        throw new RuntimeException('Vista admin inexistente: ' . $name);
+    }
+    ob_start();
+    require $viewFile;
+    $content = (string) ob_get_clean();
+    require ROOT_PATH . '/views/admin/layout.php';
+}
+
+function csrf_field(): string
+{
+    return \App\Csrf::field();
+}
+
 /** @param array<string, mixed> $data */
 function view(string $name, array $data = []): void
 {
