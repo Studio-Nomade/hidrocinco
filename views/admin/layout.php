@@ -13,8 +13,8 @@
     <aside class="admin-sidebar">
         <a class="admin-brand" href="<?= e(url('/admin')) ?>"><img src="<?= e(asset('img/logo.svg')) ?>" alt="Hidrocinco" width="180" height="50"><span>Admin</span></a>
         <nav aria-label="Administración">
-            <a class="is-active" href="<?= e(url('/admin')) ?>">Dashboard</a>
-            <span aria-disabled="true">Servicios <small>Próximamente</small></span>
+            <a href="<?= e(url('/admin')) ?>">Dashboard</a>
+            <a href="<?= e(url('/admin/servicios')) ?>">Servicios</a>
             <span aria-disabled="true">Blog <small>Próximamente</small></span>
             <span aria-disabled="true">Mensajes <small>Próximamente</small></span>
         </nav>
@@ -22,5 +22,6 @@
     </aside>
     <main class="admin-main"><?= $content ?></main>
 <?php endif; ?>
+<?php foreach (($scripts ?? []) as $script): ?><script src="<?= e(asset($script)) ?>" defer></script><?php endforeach; ?>
 </body>
 </html>

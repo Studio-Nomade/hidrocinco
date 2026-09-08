@@ -30,6 +30,12 @@ function asset(string $path): string
     return url('/assets/' . ltrim($path, '/'));
 }
 
+function media_url(?string $path, string $fallback = 'img/logo-mark.svg'): string
+{
+    $path = $path ?: $fallback;
+    return str_starts_with($path, 'uploads/') ? url('/' . $path) : asset($path);
+}
+
 function truncate_text(string $text, int $length = 180): string
 {
     $plain = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
@@ -50,6 +56,12 @@ function fecha_es(?string $date): string
         return '';
     }
     return (int) date('j', $timestamp) . ' de ' . $months[(int) date('n', $timestamp)] . ', ' . date('Y', $timestamp);
+}
+
+function slugify(string $value): string
+{
+    $ascii = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', mb_strtolower(trim($value))) ?: '';
+    return trim((string) preg_replace('/[^a-z0-9]+/', '-', $ascii), '-');
 }
 
 function not_found(): void

@@ -1,7 +1,7 @@
-<?php $hero = $service['hero_image'] ? asset($service['hero_image']) : asset('img/hero-agua.jpg'); ?>
+<?php $hero = media_url($service['hero_image'], 'img/hero-agua.jpg'); ?>
 <section class="service-hero" style="--service-hero:url('<?= e($hero) ?>')">
     <div class="container center">
-        <img src="<?= e(asset($service['icon'] ?: 'img/logo-mark.svg')) ?>" alt="" width="72" height="72">
+                    <img src="<?= e(media_url($service['icon'])) ?>" alt="" width="72" height="72">
         <h1><?= e($service['title']) ?></h1>
     </div>
 </section>
@@ -18,7 +18,7 @@
                             <p class="<?= !empty($block['highlight_first']) && $paragraphIndex === 0 ? 'lead' : '' ?>"><?= e($paragraph) ?></p>
                         <?php endforeach; ?>
                     </div>
-                    <img src="<?= e(isset($block['image']) ? asset($block['image']) : asset('img/somos-hidrocinco.webp')) ?>" alt="" width="800" height="500">
+                    <img src="<?= e(media_url($block['image'] ?? null, 'img/somos-hidrocinco.webp')) ?>" alt="" width="800" height="500" loading="lazy">
                 </div>
             </section>
         <?php elseif ($type === 'feature'): ?>

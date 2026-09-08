@@ -8,7 +8,7 @@
         <div class="service-grid" aria-label="Nuestros servicios">
             <?php foreach ($services as $service): ?>
                 <a class="service-card" href="<?= e(url('/servicios/' . $service['slug'])) ?>">
-                    <img src="<?= e(asset($service['icon'] ?: 'img/logo-mark.svg')) ?>" alt="" width="52" height="52">
+                    <img src="<?= e(media_url($service['icon'])) ?>" alt="" width="52" height="52">
                     <h2><?= e($service['title']) ?></h2>
                     <span>Ver más <b aria-hidden="true">→</b></span>
                 </a>
