@@ -15,6 +15,7 @@ final class HomeController
             'title' => 'Hidrocinco — Expertos en sistemas de agua',
             'description' => 'Somos una empresa de servicio, con más de 40 años de experiencia en soluciones hidráulicas para Chile.',
             'services' => $services,
+            'canonical' => url('/'),
         ]);
     }
 }

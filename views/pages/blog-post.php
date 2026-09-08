@@ -10,13 +10,13 @@ $encodedTitle = rawurlencode((string) $post['title']);
         <h1><?= e($post['title']) ?></h1>
         <time datetime="<?= e($post['published_at']) ?>"><?= e(fecha_es($post['published_at'])) ?></time>
     </header>
-    <div class="container prose post-body"><?= $post['body_html'] ?></div>
+    <div class="container prose post-body"><h2 class="sr-only">Contenido de la nota</h2><?= $post['body_html'] ?></div>
     <footer class="container narrow post-footer">
         <div class="share-row"><strong>Comparte esta nota:</strong>
             <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?= e($encodedUrl) ?>" target="_blank" rel="noopener" aria-label="Compartir en LinkedIn">in</a>
             <a href="mailto:?subject=<?= e($encodedTitle) ?>&amp;body=<?= e($encodedUrl) ?>" aria-label="Compartir por correo">✉</a>
             <a href="https://www.threads.net/intent/post?text=<?= e($encodedTitle . '%20' . $encodedUrl) ?>" target="_blank" rel="noopener" aria-label="Compartir en Threads">@</a>
-            <a href="https://x.com/intent/post?text=<?= e($encodedTitle) ?>&amp;url=<?= e($encodedUrl) ?>" target="_blank" rel="noopener" aria-label="Compartir en X">𝕏</a>
+            <a href="https://x.com/intent/post?text=<?= e($encodedTitle) ?>&amp;url=<?= e($encodedUrl) ?>" target="_blank" rel="noopener" aria-label="Compartir en X">X</a>
         </div>
         <?php if ($nextPost): ?><a class="next-post" href="<?= e(url('/blog/' . $nextPost['slug'])) ?>"><span>Nota Siguiente</span><strong><?= e($nextPost['title']) ?> →</strong></a><?php endif; ?>
     </footer>

@@ -14,7 +14,7 @@ final class ContactController
 {
     public function show(): void
     {
-        view('contact', ['title' => 'Contacto — Hidrocinco', 'description' => 'Conversemos sobre las necesidades hidráulicas de tu proyecto.']);
+        view('contact', ['title' => 'Contacto — Hidrocinco', 'description' => 'Conversemos sobre las necesidades hidráulicas de tu proyecto.', 'canonical' => url('/contacto')]);
     }
 
     public function submit(): void

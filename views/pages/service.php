@@ -1,4 +1,4 @@
-<?php $hero = media_url($service['hero_image'], 'img/hero-agua.jpg'); ?>
+<?php $hero = media_url($service['hero_image'], 'img/hero-agua.webp'); ?>
 <section class="service-hero" style="--service-hero:url('<?= e($hero) ?>')">
     <div class="container center">
                     <img src="<?= e(media_url($service['icon'])) ?>" alt="" width="72" height="72">
@@ -24,7 +24,7 @@
         <?php elseif ($type === 'feature'): ?>
             <section class="service-block service-block--feature section">
                 <div class="container service-split <?= empty($block['decor']) ? 'service-split--compact' : '' ?>">
-                    <?php if (!empty($block['decor'])): ?><img class="decor-drop" src="<?= e(asset('img/decor-gota.svg')) ?>" alt="" width="220" height="260"><?php endif; ?>
+                    <?php if (!empty($block['decor'])): ?><img class="decor-drop" src="<?= e(asset('img/decor-gota.svg')) ?>" alt="" width="220" height="260" loading="lazy"><?php endif; ?>
                     <div>
                         <h2><?= e($block['title'] ?? '') ?></h2>
                         <?php foreach (($block['paragraphs'] ?? []) as $paragraph): ?><p><?= e($paragraph) ?></p><?php endforeach; ?>

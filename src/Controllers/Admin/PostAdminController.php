@@ -82,8 +82,8 @@ final class PostAdminController
         admin_view('posts/form', [
             'title' => ($post ? 'Editar' : 'Nueva') . ' nota — Hidrocinco Admin',
             'post' => $post, 'errors' => $errors, 'old' => $old,
-            'styles' => ['vendor/quill/quill.snow.css', 'css/admin-blog.css'],
-            'scripts' => ['vendor/quill/quill.min.js', 'js/admin-posts.js'],
+            'styles' => ['vendor/quill/quill.snow.css', 'css/admin-blog.min.css?v=20260908'],
+            'scripts' => ['vendor/quill/quill.min.js', 'js/admin-posts.min.js?v=20260908'],
         ]);
     }
 

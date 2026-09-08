@@ -93,7 +93,7 @@ final class ServiceAdminController
         admin_view('services/form', [
             'title' => ($service ? 'Editar' : 'Nuevo') . ' servicio — Hidrocinco Admin',
             'service' => $service, 'errors' => $errors, 'old' => $old,
-            'scripts' => ['js/admin-services.js'],
+            'scripts' => ['js/admin-services.min.js?v=20260908'],
             'icons' => [
                 'img/icons/pozos.png' => 'Pozos profundos', 'img/icons/estanque.png' => 'Estanque',
                 'img/icons/ptas.png' => 'Planta de tratamiento', 'img/icons/caldera.png' => 'Caldera',

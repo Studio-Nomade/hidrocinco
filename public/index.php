@@ -12,6 +12,7 @@ use App\Controllers\Admin\PostAdminController;
 use App\Controllers\Admin\SubmissionAdminController;
 use App\Controllers\ContactController;
 use App\Controllers\NewsletterController;
+use App\Controllers\SitemapController;
 use App\Router;
 
 require dirname(__DIR__) . '/src/bootstrap.php';
@@ -24,6 +25,7 @@ $router->get('/blog/{slug}', [BlogController::class, 'show']);
 $router->get('/contacto', [ContactController::class, 'show']);
 $router->post('/contacto', [ContactController::class, 'submit']);
 $router->post('/newsletter', [NewsletterController::class, 'submit']);
+$router->get('/sitemap.xml', [SitemapController::class, 'index']);
 $router->get('/admin/login', [AuthController::class, 'showLogin']);
 $router->post('/admin/login', [AuthController::class, 'login']);
 $router->post('/admin/logout', [AuthController::class, 'logout']);

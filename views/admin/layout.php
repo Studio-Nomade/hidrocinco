@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title ?? 'Hidrocinco Admin') ?></title>
-    <link rel="icon" href="<?= e(asset('img/logo-mark.svg')) ?>" type="image/svg+xml">
-    <link rel="stylesheet" href="<?= e(asset('css/admin.css')) ?>">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="icon" href="<?= e(url('/favicon.ico')) ?>" sizes="any">
+    <link rel="preload" href="<?= e(asset('fonts/poppins-regular.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="<?= e(asset('css/admin.min.css?v=20260908')) ?>">
     <?php foreach (($styles ?? []) as $style): ?><link rel="stylesheet" href="<?= e(asset($style)) ?>"><?php endforeach; ?>
 </head>
 <body class="<?= !empty($loginPage) ? 'admin-login-page' : 'admin-page' ?>">

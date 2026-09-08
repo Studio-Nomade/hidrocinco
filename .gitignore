@@ -2,6 +2,7 @@
 config.php
 public/uploads/*
 !public/uploads/.gitkeep
+!public/uploads/.htaccess
 /vendor/
 var/*.sqlite
 var/sessions/

@@ -20,7 +20,7 @@
 <section class="about-section section" id="nosotros">
     <div class="container split-layout">
         <a class="video-card" href="https://youtu.be/6zTrRqoJLb0" target="_blank" rel="noopener" aria-label="Ver video de Hidrocinco">
-            <img src="<?= e(asset('img/somos-hidrocinco.webp')) ?>" alt="Técnico de Hidrocinco revisando un sistema hidráulico" width="2560" height="1442">
+            <img src="<?= e(asset('img/somos-hidrocinco-1200.webp')) ?>" srcset="<?= e(asset('img/somos-hidrocinco-640.webp')) ?> 640w, <?= e(asset('img/somos-hidrocinco-1200.webp')) ?> 1200w" sizes="(max-width: 768px) calc(100vw - 40px), 50vw" alt="Técnico de Hidrocinco revisando un sistema hidráulico" width="1200" height="676" loading="lazy">
             <span class="play-button" aria-hidden="true">▶</span>
         </a>
         <div class="about-copy">

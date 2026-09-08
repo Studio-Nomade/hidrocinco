@@ -35,6 +35,15 @@ final class ServiceController
             'title' => $service['title'] . ' — Hidrocinco',
             'description' => $description ?: (string) $service['card_summary'],
             'service' => $service,
+            'canonical' => url('/servicios/' . $service['slug']),
+            'ogImage' => media_url($service['hero_image'], 'img/og-default.jpg'),
+            'structuredData' => [[
+                '@context' => 'https://schema.org', '@type' => 'Service',
+                'name' => $service['title'], 'description' => $description ?: $service['card_summary'],
+                'url' => url('/servicios/' . $service['slug']),
+                'provider' => ['@type' => 'Organization', 'name' => 'Hidrocinco', 'url' => url('/')],
+                'areaServed' => ['@type' => 'Country', 'name' => 'Chile'],
+            ]],
         ]);
     }
 

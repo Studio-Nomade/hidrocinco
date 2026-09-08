@@ -21,10 +21,14 @@ final class Router
 
     public function dispatch(string $method, string $uri): void
     {
+        $method = strtoupper($method);
+        if ($method === 'HEAD') {
+            $method = 'GET';
+        }
         $path = rawurldecode(parse_url($uri, PHP_URL_PATH) ?: '/');
         $path = $path !== '/' ? rtrim($path, '/') : $path;
 
-        foreach ($this->routes[strtoupper($method)] ?? [] as $route) {
+        foreach ($this->routes[$method] ?? [] as $route) {
             $regex = preg_replace('#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#', '(?P<$1>[^/]+)', $route['pattern']);
             if (!preg_match('#^' . $regex . '$#', $path, $matches)) {
                 continue;

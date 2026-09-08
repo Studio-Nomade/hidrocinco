@@ -11,6 +11,6 @@
         <label class="form-span-2">Extracto<textarea name="excerpt" rows="4" maxlength="500"><?= e($values['excerpt'] ?? '') ?></textarea><small>Si queda vacío, se genera desde el cuerpo.</small></label>
         <label class="form-span-2">Imagen destacada (JPG, PNG o WebP; máximo 3 MB)<input type="file" name="featured_image" accept="image/jpeg,image/png,image/webp"><?php if (!empty($post['featured_image'])): ?><small>Actual: <?= e($post['featured_image']) ?></small><?php endif; ?></label>
     </div></section>
-    <section class="form-panel"><h2>Cuerpo</h2><p>Selecciona texto para aplicar enlaces o usa la barra de formato.</p><div data-quill-editor><?= $values['body_html'] ?? '' ?></div><textarea class="sr-field" name="body_html" data-body-html><?= e($values['body_html'] ?? '') ?></textarea></section>
+    <section class="form-panel"><h2>Cuerpo</h2><p>Selecciona texto para aplicar enlaces o usa la barra de formato.</p><div data-quill-editor><?= $values['body_html'] ?? '' ?></div><textarea class="sr-field" name="body_html" data-body-html aria-label="HTML del cuerpo de la nota"><?= e($values['body_html'] ?? '') ?></textarea></section>
     <div class="form-actions"><a href="<?= e(url('/admin/blog')) ?>">Cancelar</a><button class="admin-button" type="submit">Guardar nota</button></div>
 </form>
