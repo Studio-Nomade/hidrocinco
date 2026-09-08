@@ -12,6 +12,11 @@ la rama de producción, con provisión de base de datos en producción, `.htacce
 documentación del flujo staging→producción. SiteGround **no** trae CD automático de fábrica; lo
 montamos nosotros.
 
+> **DNS / correo:** la migración de la zona DNS a SiteGround (manteniendo el correo Microsoft 365 y
+> Brevo, cancelando BlueHosting) está detallada en [anexo-dns-siteground.md](anexo-dns-siteground.md).
+> El corte de nameservers en NIC.cl lo hace Sebastián **después** de auditar el diseño e instalarlo en
+> SiteGround.
+
 ## Modelo de ramas
 
 - `develop`: integración (aquí se mergean los hitos auditados).
@@ -35,21 +40,23 @@ al docroot del sitio y ejecuta pasos post-deploy (migraciones).
   **excluirlo** para no sobrescribirlo.
 - **`public/uploads/`**: contenido subido por el admin **no** debe borrarse en cada deploy → excluir de
   rsync (`--exclude`), o usar `rsync` sin `--delete` sobre esa ruta. Definir claramente.
-- **`vendor/`** (si se adoptó PHPMailer en Hito 8): o se commitea, o el pipeline corre
-  `composer install --no-dev --optimize-autoloader` en el runner y sincroniza `vendor/`. Elegir y
-  documentar (SiteGround tiene Composer, pero es más simple construir en el runner y subir).
+- **`vendor/`** (PHPMailer, del Hito 8): **el pipeline lo construye en el runner** con
+  `composer install --no-dev --optimize-autoloader` y lo **sincroniza al servidor** (decisión tomada —
+  forma 2). `vendor/` está en `.gitignore` (no viaja en el repo). Así el server no necesita ejecutar
+  Composer; recibe `vendor/` ya resuelto por rsync.
 
 ## Workflow GitHub Actions (`.github/workflows/deploy.yml`)
 
 Pasos:
 1. Trigger: `on: push: branches: [main]`.
 2. `actions/checkout`.
-3. (Si aplica) setup PHP + `composer install --no-dev --optimize-autoloader`.
-4. (Si aplica) minificar assets estáticos (paso opcional; o ya versionados desde Hito 9).
+3. `shivammathur/setup-php` (PHP 8.x) + `composer install --no-dev --optimize-autoloader` → genera
+   `vendor/` en el runner (PHPMailer, Hito 8).
+4. (Opcional) minificar assets estáticos (o ya versionados desde Hito 9).
 5. Cargar clave SSH desde secret (`webfactory/ssh-agent` o `appleboy/ssh-action` / `rsync`).
-6. **rsync** del proyecto al server por SSH, con `--exclude` de: `.git`, `.github`, `Local/`,
-   `config.php`, `public/uploads/`, `node_modules`, archivos de dev, y `--delete` **solo** en las
-   rutas seguras (código), nunca en `uploads`.
+6. **rsync** del proyecto al server por SSH, **incluyendo `vendor/`**, con `--exclude` de: `.git`,
+   `.github`, `Local/`, `config.php`, `public/uploads/`, archivos de dev, y `--delete` **solo** en las
+   rutas seguras (código/`vendor`), nunca en `uploads`.
 7. Post-deploy por SSH: `php db/migrate.php` (idempotente) en el server. **No** correr `seed.php` en
    prod (los datos de prod los gestiona el admin); documentar el seeding inicial como paso manual
    controlado la primera vez.
@@ -79,8 +86,8 @@ Pasos:
 - Actualizar el `README.md` raíz del proyecto con "Desarrollo local" + "Deploy".
 
 ## Seguridad
-- `config.php`, claves y `.env` nunca en el repo. `.gitignore` cubre `config.php`, `uploads/`,
-  `vendor/` (si no se commitea).
+- `config.php`, claves y `.env` nunca en el repo. `.gitignore` cubre `config.php`, `uploads/` y
+  `vendor/` (este último se genera en el runner y se sincroniza; no se commitea).
 - Clave SSH dedicada al deploy (no la personal), con acceso mínimo.
 - Bloquear acceso web a `src/`, `views/`, `db/`, `config.php` (si quedan bajo el docroot en opción 2)
   vía `.htaccess`/deny.

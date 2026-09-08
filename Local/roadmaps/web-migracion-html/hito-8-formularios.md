@@ -45,17 +45,23 @@ GET  /contacto        -> (opcional) página de contacto dedicada con el bloque
   descartar como spam silenciosamente (respuesta de éxito falso para no informar al bot).
 - Si reCAPTCHA falla la verificación → error "Verifica que no eres un robot".
 
-## Envío de correo
+## Envío de correo (decisión tomada: PHPMailer vía SMTP autenticado)
 
-- Preferir **SMTP autenticado** (SiteGround provee SMTP con las cuentas de correo del dominio) sobre
-  `mail()` para mejor entregabilidad. Config en `config.php`: `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`,
-  `MAIL_PASS`, `MAIL_FROM`, `MAIL_TO` (destino: `hidrocinco@hidrocinco.cl`).
-  - Implementar un `Mailer` mínimo. Opciones aceptables en GoGeek: PHPMailer vía Composer (compatible
-    con SiteGround) **o** `mail()` como fallback. **Recomendado: PHPMailer con SMTP** (es la primera
-    dependencia Composer del proyecto; si se introduce Composer, `vendor/` va en `.gitignore` y el
-    deploy debe correr `composer install --no-dev` — coordinar con Hito 10). Si se prefiere cero
-    dependencias, usar `mail()` con headers correctos y aceptar menor entregabilidad; dejar el punto
-    documentado para decidir.
+- **Usar PHPMailer con SMTP autenticado** (SiteGround provee SMTP con las cuentas de correo del
+  dominio). Es la mejor opción de entregabilidad y GoGeek es 100% compatible con Composer. **No** usar
+  `mail()`.
+- **Composer**: este hito **introduce Composer** en el proyecto (primera y —por ahora— única
+  dependencia). Crear `composer.json` requiriendo `phpmailer/phpmailer` (versión estable actual).
+  - `vendor/` va en `.gitignore` (**no** se commitea). Se genera en el pipeline de deploy con
+    `composer install --no-dev --optimize-autoloader` — **coordinado con Hito 10** (allí se ejecuta en
+    GitHub Actions y se sincroniza `vendor/` al servidor).
+  - En **local**, el dev corre `composer install` una vez (documentar en el README).
+  - Cargar el autoload de Composer en el bootstrap (`require 'vendor/autoload.php'`) de forma segura
+    (si no existe `vendor/`, error claro pidiendo `composer install`).
+- Config en `config.php`: `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, `MAIL_PASS`, `MAIL_FROM`, `MAIL_TO`
+  (destino: `hidrocinco@hidrocinco.cl`). Añadirlas a `config.example.php`.
+- Implementar un wrapper `src/Mailer.php` sobre PHPMailer (configura SMTP desde `config.php`, expone
+  `send($to, $subject, $htmlBody, $replyTo)`), para no acoplar los controladores a la librería.
 - Email de contacto → asunto "Nuevo mensaje de contacto — Hidrocinco", cuerpo con los campos +
   `source_page`. `Reply-To` = email del remitente.
 - Guardar SIEMPRE en `submissions` aunque el correo falle (registrar el fallo en log); no perder el
@@ -87,7 +93,9 @@ GET  /contacto        -> (opcional) página de contacto dedicada con el bloque
 5. Newsletter funciona (guarda type `newsletter`, aparece en admin).
 6. `source_page` refleja desde dónde se envió.
 7. Claves y credenciales solo en `config.php` (no en el repo). `config.example.php` actualizado.
-8. Responsive y accesible (labels asociadas, foco visible).
+8. `composer.json` versionado; `vendor/` en `.gitignore`; `Mailer.php` envuelve PHPMailer; el
+   bootstrap carga `vendor/autoload.php` con error claro si falta.
+9. Responsive y accesible (labels asociadas, foco visible).
 
 ## Pasos de verificación local
 
@@ -102,8 +110,9 @@ php -S localhost:8000 -t public
 # Suscribir newsletter desde /blog → aparece en admin
 ```
 
-> **Nota de coordinación con Hito 10:** si se adopta PHPMailer (Composer), el pipeline de deploy debe
-> ejecutar `composer install --no-dev --optimize-autoloader` o subir `vendor/`. Anotarlo en Hito 10.
+> **Coordinación con Hito 10:** el pipeline de deploy ejecuta `composer install --no-dev
+> --optimize-autoloader` en GitHub Actions y sincroniza `vendor/` al servidor (ver Hito 10). En local,
+> el dev corre `composer install` una vez.
 
 ---
 
