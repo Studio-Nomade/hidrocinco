@@ -31,7 +31,7 @@ $schemas = array_merge([$organizationSchema], $structuredData ?? []);
     <link rel="manifest" href="<?= e(url('/site.webmanifest')) ?>">
     <link rel="preload" href="<?= e(asset('fonts/poppins-400.woff2')) ?>" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="<?= e(asset('fonts/poppins-600.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="<?= e(asset('css/main.min.css?v=20260908b')) ?>">
+    <link rel="stylesheet" href="<?= e(asset('css/main.min.css?v=20260908e')) ?>">
     <?php foreach ($schemas as $schema): ?><script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?></script><?php endforeach; ?>
 </head>
 <body>
@@ -41,7 +41,8 @@ $schemas = array_merge([$organizationSchema], $structuredData ?? []);
     <main id="contenido"><?= $content ?></main>
     <?php require ROOT_PATH . '/views/partials/footer.php'; ?>
     <?php require ROOT_PATH . '/views/partials/chat-button.php'; ?>
-    <script src="<?= e(asset('js/main.min.js?v=20260908')) ?>" defer></script>
+    <?php require ROOT_PATH . '/views/partials/modals.php'; ?>
+    <script src="<?= e(asset('js/main.min.js?v=20260908c')) ?>" defer></script>
     <?php if ((string) config('recaptcha.site_key', '') !== ''): ?><script src="https://www.google.com/recaptcha/api.js" async defer></script><?php endif; ?>
 </body>
 </html>

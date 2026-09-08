@@ -14,6 +14,7 @@ use App\Controllers\ContactController;
 use App\Controllers\NewsletterController;
 use App\Controllers\SitemapController;
 use App\Controllers\AppsCincoController;
+use App\Controllers\EmergencyController;
 use App\Router;
 
 require dirname(__DIR__) . '/src/bootstrap.php';
@@ -27,6 +28,7 @@ $router->get('/appscinco', [AppsCincoController::class, 'index']);
 $router->get('/contacto', [ContactController::class, 'show']);
 $router->post('/contacto', [ContactController::class, 'submit']);
 $router->post('/newsletter', [NewsletterController::class, 'submit']);
+$router->post('/emergencia', [EmergencyController::class, 'submit']);
 $router->get('/sitemap.xml', [SitemapController::class, 'index']);
 $router->get('/admin/login', [AuthController::class, 'showLogin']);
 $router->post('/admin/login', [AuthController::class, 'login']);
