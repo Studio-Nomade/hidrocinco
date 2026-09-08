@@ -8,6 +8,7 @@ use App\Controllers\ServiceController;
 use App\Controllers\Admin\AuthController;
 use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\ServiceAdminController;
+use App\Controllers\Admin\PostAdminController;
 use App\Router;
 
 require dirname(__DIR__) . '/src/bootstrap.php';
@@ -28,6 +29,12 @@ $router->post('/admin/servicios', [ServiceAdminController::class, 'store']);
 $router->get('/admin/servicios/{id}/editar', [ServiceAdminController::class, 'edit']);
 $router->post('/admin/servicios/{id}/eliminar', [ServiceAdminController::class, 'destroy']);
 $router->post('/admin/servicios/{id}', [ServiceAdminController::class, 'update']);
+$router->get('/admin/blog', [PostAdminController::class, 'index']);
+$router->get('/admin/blog/nueva', [PostAdminController::class, 'create']);
+$router->post('/admin/blog', [PostAdminController::class, 'store']);
+$router->get('/admin/blog/{id}/editar', [PostAdminController::class, 'edit']);
+$router->post('/admin/blog/{id}/eliminar', [PostAdminController::class, 'destroy']);
+$router->post('/admin/blog/{id}', [PostAdminController::class, 'update']);
 $router->get('/{legacySlug}', [ServiceController::class, 'redirectLegacy']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

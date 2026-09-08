@@ -5,6 +5,7 @@
     <title><?= e($title ?? 'Hidrocinco Admin') ?></title>
     <link rel="icon" href="<?= e(asset('img/logo-mark.svg')) ?>" type="image/svg+xml">
     <link rel="stylesheet" href="<?= e(asset('css/admin.css')) ?>">
+    <?php foreach (($styles ?? []) as $style): ?><link rel="stylesheet" href="<?= e(asset($style)) ?>"><?php endforeach; ?>
 </head>
 <body class="<?= !empty($loginPage) ? 'admin-login-page' : 'admin-page' ?>">
 <?php if (!empty($loginPage)): ?>
@@ -15,7 +16,7 @@
         <nav aria-label="Administración">
             <a href="<?= e(url('/admin')) ?>">Dashboard</a>
             <a href="<?= e(url('/admin/servicios')) ?>">Servicios</a>
-            <span aria-disabled="true">Blog <small>Próximamente</small></span>
+            <a href="<?= e(url('/admin/blog')) ?>">Blog</a>
             <span aria-disabled="true">Mensajes <small>Próximamente</small></span>
         </nav>
         <form action="<?= e(url('/admin/logout')) ?>" method="post"><?= csrf_field() ?><button type="submit">Cerrar sesión</button></form>
