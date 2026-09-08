@@ -117,7 +117,7 @@ config.example.php      # plantilla; config.php real fuera de VCS
 | 8 | [Formularios (contacto + newsletter) + correo](hito-8-formularios.md) | ⬜ Pendiente | `feature/h8-formularios` |
 | 9 | [SEO, performance, responsividad y QA](hito-9-seo-perf-qa.md) | ⬜ Pendiente | `feature/h9-seo-qa` |
 | 10 | [Deploy GitHub → SiteGround GoGeek](hito-10-deploy-siteground.md) | 🟦 En auditoría | `feature/h10-deploy` |
-| 11 | [Recursos gráficos reales + tipografía + página AppsCinco](hito-11-recursos-tipografia-appscinco.md) | ⬜ Pendiente | `feature/h11-recursos-tipografia-appscinco` |
+| 11 | [Recursos gráficos reales + tipografía + página AppsCinco](hito-11-recursos-tipografia-appscinco.md) | 🟦 En auditoría | `feature/h11-recursos-tipografia-appscinco` |
 
 **Anexos:** [Migración de DNS a SiteGround (Opción B)](anexo-dns-siteground.md) — zona completa
 (web + Microsoft 365 + Brevo + `ws.hidrocinco.cl`/ACM de AppsCinco), qué se elimina (cPanel + 3 DKIM

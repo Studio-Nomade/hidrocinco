@@ -244,6 +244,15 @@ php -S localhost:8000 -t public
 
 ## Estado y auditoría
 
-- **Estado:** ⬜ Pendiente
-- **Rama:** `feature/h11-recursos-tipografia-appscinco`
-- **Notas de auditoría:** _(las completa Claude al revisar)_
+- **Estado:** 🟦 Implementado (por Claude directo, no Codex) — pendiente auditoría/QA de Sebastián.
+- **Rama:** `feature/h11-recursos-tipografia-appscinco` (creada desde `feature/h9-seo-qa`, que tiene el
+  front completo; `develop` aún no tiene mergeados los hitos). Commits: `docs(h11)…` + `feat(h11)…`.
+- **Gaps resueltos:**
+  - Íconos de servicio: eran los 7 PNG monoline blancos (`Pozos-Profundos-1.png`, etc.); Codex ya los
+    tenía cargados en `public/assets/img/icons/` desde hitos previos → sin cambio necesario.
+  - AppsCinco (dashboard, hero, foto continuidad): **extraídos del PDF de la maqueta** con
+    `pdfimages`/`pdftoppm` y optimizados a webp. El dashboard se recompuso sobre blanco (el JPEG
+    embebido traía fondo negro en las zonas transparentes).
+- **Notas de verificación:** home, servicios (7), blog y `/appscinco` responden 200; fuentes
+  self-hosted sin peticiones a Google; tipografía reducida aplicada; verificado en preview local
+  (`http://localhost:8000`). Falta pase de QA responsive fino y revisión visual de Sebastián.
