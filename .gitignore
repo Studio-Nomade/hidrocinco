@@ -1,8 +1,16 @@
 .DS_Store
 config.php
+.env
+.env.*
+!.env.example
+id_rsa*
+id_ed25519*
+*.key
+*.pem
 public/uploads/*
 !public/uploads/.gitkeep
-vendor/
+!public/uploads/.htaccess
+/vendor/
 var/*.sqlite
 var/sessions/
 .phpunit.cache/

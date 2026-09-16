@@ -13,7 +13,11 @@ propio, liviano y mantenible por código, desplegado en **SiteGround GoGeek**.
   enriquecido) son dinámicos/gestionables. Home, Visión, footer y datos de contacto viven en el
   código.
 - **Formularios** (contacto + newsletter): se **envían por email** a Hidrocinco **y** se **guardan
-  en DB** (visibles en admin), con **reCAPTCHA v2 + honeypot**.
+  en DB** (visibles en admin), con **reCAPTCHA v2 + honeypot**. El envío usa **PHPMailer vía SMTP
+  autenticado** (mejor entregabilidad; SiteGround lo recomienda sobre `mail()`).
+- **Composer**: el proyecto arranca sin dependencias (Hitos 0–7); el **Hito 8 introduce Composer** con
+  una única dependencia (**PHPMailer**). `vendor/` no se commitea: se genera en GitHub Actions y se
+  sincroniza al servidor (ver Hito 10). GoGeek es 100% compatible con Composer.
 - **Deploy**: **GitHub Actions → SSH/rsync** a GoGeek al hacer push a la rama de producción.
 
 ## Metodología (recordatorio)
@@ -112,7 +116,12 @@ config.example.php      # plantilla; config.php real fuera de VCS
 | 7 | [Backoffice: CRUD Blog (editor enriquecido)](hito-7-admin-blog.md) | ⬜ Pendiente | `feature/h7-admin-blog` |
 | 8 | [Formularios (contacto + newsletter) + correo](hito-8-formularios.md) | ⬜ Pendiente | `feature/h8-formularios` |
 | 9 | [SEO, performance, responsividad y QA](hito-9-seo-perf-qa.md) | ⬜ Pendiente | `feature/h9-seo-qa` |
-| 10 | [Deploy GitHub → SiteGround GoGeek](hito-10-deploy-siteground.md) | ⬜ Pendiente | `feature/h10-deploy` |
+| 10 | [Deploy GitHub → SiteGround GoGeek](hito-10-deploy-siteground.md) | 🟦 En auditoría | `feature/h10-deploy` |
+| 11 | [Recursos gráficos reales + tipografía + página AppsCinco](hito-11-recursos-tipografia-appscinco.md) | 🟦 En auditoría | `feature/h11-recursos-tipografia-appscinco` |
+
+**Anexos:** [Migración de DNS a SiteGround (Opción B)](anexo-dns-siteground.md) — zona completa
+(web + Microsoft 365 + Brevo + `ws.hidrocinco.cl`/ACM de AppsCinco), qué se elimina (cPanel + 3 DKIM
+de SES remanentes) y secuencia de corte de nameservers en NIC.cl.
 
 Leyenda: ⬜ Pendiente · 🟨 En curso · 🟦 En auditoría · ✅ Aprobado (mergeado a `develop`).
 

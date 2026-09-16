@@ -1,0 +1,128 @@
+name: Deploy SiteGround
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Entorno de GitHub con los secrets del destino
+        required: true
+        type: choice
+        default: staging
+        options:
+          - staging
+          - production
+      dry_run:
+        description: Simular rsync sin modificar el servidor
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ inputs.target_environment || 'production' }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.target_environment || 'production' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: ${{ inputs.target_environment || 'production' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@2.37.1
+        with:
+          php-version: '8.2'
+          extensions: dom, mbstring, pdo_mysql
+          coverage: none
+          tools: composer:v2
+
+      - name: Instalar dependencias de producción
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      - name: Validar aplicación
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          composer validate --strict --no-check-publish
+          find src db public views -type f -name '*.php' -print0 | xargs -0 -n1 php -l >/dev/null
+
+      - name: Validar destino
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -Eeuo pipefail
+          for variable in SSH_HOST SSH_PORT SSH_USER SSH_PRIVATE_KEY DEPLOY_PATH; do
+            if [[ -z "${!variable:-}" ]]; then
+              echo "Falta el secret requerido: ${variable}" >&2
+              exit 1
+            fi
+          done
+          [[ "$SSH_HOST" =~ ^[A-Za-z0-9.-]+$ ]] || { echo 'SSH_HOST inválido' >&2; exit 1; }
+          [[ "$SSH_USER" =~ ^[A-Za-z0-9._-]+$ ]] || { echo 'SSH_USER inválido' >&2; exit 1; }
+          [[ "$SSH_PORT" =~ ^[0-9]+$ ]] && (( SSH_PORT >= 1 && SSH_PORT <= 65535 )) || { echo 'SSH_PORT inválido' >&2; exit 1; }
+          [[ "$DEPLOY_PATH" =~ ^/[A-Za-z0-9._/-]+$ ]] || { echo 'DEPLOY_PATH debe ser una ruta absoluta sin espacios' >&2; exit 1; }
+
+      - name: Configurar SSH
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -Eeuo pipefail
+          install -m 700 -d "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$RUNNER_TEMP/hidrocinco_deploy_key"
+          chmod 600 "$RUNNER_TEMP/hidrocinco_deploy_key"
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      - name: Sincronizar código y dependencias
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+        run: |
+          set -Eeuo pipefail
+          ssh_command="ssh -i $RUNNER_TEMP/hidrocinco_deploy_key -p $SSH_PORT -o BatchMode=yes -o StrictHostKeyChecking=yes"
+          rsync_options=(--archive --compress --delete-delay --delay-updates --human-readable --itemize-changes --exclude-from=.deployignore)
+          security_options=(--archive --compress)
+          if [[ "$DRY_RUN" == 'true' ]]; then
+            rsync_options+=(--dry-run)
+            security_options+=(--dry-run)
+          else
+            $ssh_command "$SSH_USER@$SSH_HOST" "mkdir -p -- '$DEPLOY_PATH/public/uploads'"
+          fi
+          rsync "${security_options[@]}" -e "$ssh_command" public/uploads/.htaccess "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/public/uploads/.htaccess"
+          rsync "${rsync_options[@]}" -e "$ssh_command" ./ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
+
+      - name: Ejecutar migraciones
+        if: ${{ github.event_name == 'push' || !inputs.dry_run }}
+        shell: bash
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -Eeuo pipefail
+          ssh -i "$RUNNER_TEMP/hidrocinco_deploy_key" -p "$SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$SSH_HOST" "cd -- '$DEPLOY_PATH' && php db/migrate.php"
