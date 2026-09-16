@@ -15,6 +15,13 @@ $schemas = array_merge([$organizationSchema], $structuredData ?? []);
 <!doctype html>
 <html lang="es">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KMF45R3D');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($pageTitle) ?></title>
@@ -29,19 +36,23 @@ $schemas = array_merge([$organizationSchema], $structuredData ?? []);
     <link rel="icon" href="<?= e(asset('img/favicon-32.png')) ?>" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="<?= e(asset('img/apple-touch-icon.png')) ?>">
     <link rel="manifest" href="<?= e(url('/site.webmanifest')) ?>">
-    <link rel="preload" href="<?= e(asset('fonts/poppins-regular.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="<?= e(asset('fonts/poppins-semibold.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="<?= e(asset('css/main.min.css?v=20260908')) ?>">
+    <link rel="preload" href="<?= e(asset('fonts/poppins-400.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?= e(asset('fonts/poppins-600.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="<?= e(asset('css/main.min.css?v=20260908e')) ?>">
     <?php foreach ($schemas as $schema): ?><script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?></script><?php endforeach; ?>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KMF45R3D" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <?php require ROOT_PATH . '/views/partials/topbar.php'; ?>
     <?php require ROOT_PATH . '/views/partials/header.php'; ?>
     <main id="contenido"><?= $content ?></main>
     <?php require ROOT_PATH . '/views/partials/footer.php'; ?>
     <?php require ROOT_PATH . '/views/partials/chat-button.php'; ?>
-    <script src="<?= e(asset('js/main.min.js?v=20260908')) ?>" defer></script>
+    <?php require ROOT_PATH . '/views/partials/modals.php'; ?>
+    <script src="<?= e(asset('js/main.min.js?v=20260908c')) ?>" defer></script>
     <?php if ((string) config('recaptcha.site_key', '') !== ''): ?><script src="https://www.google.com/recaptcha/api.js" async defer></script><?php endif; ?>
 </body>
 </html>

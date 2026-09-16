@@ -14,6 +14,7 @@ final class SitemapController
         header('Content-Type: application/xml; charset=UTF-8');
         $entries = [
             ['loc' => url('/'), 'priority' => '1.0'],
+            ['loc' => url('/appscinco'), 'priority' => '0.8'],
             ['loc' => url('/blog'), 'priority' => '0.8'],
         ];
         foreach ((new ServiceRepository())->allPublishedOrdered() as $service) {
