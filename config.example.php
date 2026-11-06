@@ -22,9 +22,14 @@ return [
         'user' => getenv('MAIL_USER') ?: '',
         'pass' => getenv('MAIL_PASS') ?: '',
         'encryption' => getenv('MAIL_ENCRYPTION') ?: 'tls',
-        'to' => getenv('MAIL_TO') ?: 'hidrocinco@hidrocinco.cl',
-        'from' => getenv('MAIL_FROM') ?: 'web@hidrocinco.cl',
-        'from_name' => getenv('MAIL_FROM_NAME') ?: 'Web Hidrocinco',
+        // Remitente: debe ser un sender verificado en Brevo (hoy contacto@hidrocinco.cl).
+        'from' => getenv('MAIL_FROM') ?: 'contacto@hidrocinco.cl',
+        'from_name' => getenv('MAIL_FROM_NAME') ?: 'Hidrocinco',
+        // Destinatarios: los valores por defecto están en src/MailRecipients.php
+        // (grupos 'forms' y 'emergency'). Para cambiarlos sin tocar código:
+        // 'recipients' => [
+        //     'emergency' => ['to' => ['...'], 'cc' => ['...'], 'bcc' => ['...']],
+        // ],
     ],
     'recaptcha' => [
         'site_key' => getenv('RECAPTCHA_SITE_KEY') ?: '',
