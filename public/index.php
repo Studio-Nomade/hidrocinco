@@ -15,6 +15,7 @@ use App\Controllers\NewsletterController;
 use App\Controllers\SitemapController;
 use App\Controllers\AppsCincoController;
 use App\Controllers\EmergencyController;
+use App\Controllers\LegacyRedirectController;
 use App\Router;
 
 require dirname(__DIR__) . '/src/bootstrap.php';
@@ -48,6 +49,9 @@ $router->get('/admin/blog/{id}/editar', [PostAdminController::class, 'edit']);
 $router->post('/admin/blog/{id}/eliminar', [PostAdminController::class, 'destroy']);
 $router->post('/admin/blog/{id}', [PostAdminController::class, 'update']);
 $router->get('/admin/mensajes', [SubmissionAdminController::class, 'index']);
-$router->get('/{legacySlug}', [ServiceController::class, 'redirectLegacy']);
+// URLs del WordPress anterior → 301 (ver LegacyRedirectController). Deben ir al final.
+$router->get('/category/{slug}', [LegacyRedirectController::class, 'toBlog']);
+$router->get('/author/{slug}', [LegacyRedirectController::class, 'toBlog']);
+$router->get('/{legacySlug}', [LegacyRedirectController::class, 'rootSlug']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

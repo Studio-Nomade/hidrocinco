@@ -46,15 +46,4 @@ final class ServiceController
             ]],
         ]);
     }
-
-    public function redirectLegacy(string $legacySlug): void
-    {
-        $service = $this->services->findBySlug($legacySlug, true);
-        if (!$service) {
-            not_found();
-            return;
-        }
-
-        header('Location: ' . url('/servicios/' . $service['slug']), true, 301);
-    }
 }
