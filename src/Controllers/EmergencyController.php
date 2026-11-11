@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Csrf;
 use App\Mailer;
+use App\MailRecipients;
 use App\Repositories\SubmissionRepository;
 use Throwable;
 
@@ -69,7 +70,7 @@ final class EmergencyController
             . '<p><strong>Correo:</strong> ' . e($values['email']) . '</p>'
             . '<p><strong>Emergencia:</strong><br>' . nl2br(e($values['message'])) . '</p>';
         try {
-            (new Mailer())->send((string) config('mail.to'), '🚨 EMERGENCIA 24/7 — Hidrocinco', $body, $values['email'] !== '' ? $values['email'] : null);
+            (new Mailer())->sendToGroup(MailRecipients::EMERGENCY, '🚨 EMERGENCIA 24/7 — Hidrocinco', $body, $values['email'] !== '' ? $values['email'] : null);
         } catch (Throwable $exception) {
             error_log('Hidrocinco mail emergency error: ' . $exception->getMessage());
         }

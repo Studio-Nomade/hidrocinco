@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Csrf;
 use App\Mailer;
+use App\MailRecipients;
 use App\RecaptchaVerifier;
 use App\Repositories\SubmissionRepository;
 use Throwable;
@@ -50,7 +51,7 @@ final class ContactController
         ]);
         $body = '<h2>Nuevo mensaje de contacto</h2><p><strong>Nombre:</strong> ' . e($values['name']) . '</p><p><strong>Teléfono:</strong> ' . e($values['phone']) . '</p><p><strong>Correo:</strong> ' . e($values['email']) . '</p><p><strong>Mensaje:</strong><br>' . nl2br(e($values['message'])) . '</p><p><strong>Origen:</strong> ' . e($return) . '</p>';
         try {
-            (new Mailer())->send((string) config('mail.to'), 'Nuevo mensaje de contacto — Hidrocinco', $body, $values['email']);
+            (new Mailer())->sendToGroup(MailRecipients::FORMS, 'Nuevo mensaje de contacto — Hidrocinco', $body, $values['email']);
         } catch (Throwable $exception) {
             error_log('Hidrocinco mail contact error: ' . $exception->getMessage());
         }

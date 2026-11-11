@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Csrf;
 use App\Mailer;
+use App\MailRecipients;
 use App\RecaptchaVerifier;
 use App\Repositories\SubmissionRepository;
 use Throwable;
@@ -38,7 +39,7 @@ final class NewsletterController
         ]);
         try {
             $body = '<h2>Nueva suscripción al newsletter</h2><p><strong>Nombre:</strong> ' . e($values['name'] ?: 'No indicado') . '</p><p><strong>Correo:</strong> ' . e($values['email']) . '</p><p><strong>Origen:</strong> ' . e($return) . '</p>';
-            (new Mailer())->send((string) config('mail.to'), 'Nueva suscripción — Hidrocinco', $body, $values['email']);
+            (new Mailer())->sendToGroup(MailRecipients::FORMS, 'Nueva suscripción — Hidrocinco', $body, $values['email']);
         } catch (Throwable $exception) {
             error_log('Hidrocinco mail newsletter error: ' . $exception->getMessage());
         }
